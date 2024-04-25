@@ -50,14 +50,25 @@ class BinaryTree {
     }
 
     getTree() {
-        function printNode(node, count) {
-            console.log(`${'  '.repeat(count)}${node.data}`);
-            if (node.right) printNode(node.right, count + 1);
-            if (node.left) printNode(node.left, count + 1);
+        function printNode(node, count, isParentLeft, isParentHaveRight) {     
+            let postfix = '';       
+            if (count == 0) {
+                console.log(`${node.data}`);
+            } else {
+                if (isParentLeft && isParentHaveRight) {
+                    postfix = '├──';
+                } else {
+                    postfix = '└──';
+                }
+                console.log(`${' '.repeat(count - 4)}${postfix} ${node.data}`);
+            }
+
+            if (node.left) printNode(node.left, count + 4, true, node.right ? true : false);
+            if (node.right) printNode(node.right, count + 4, false);
         }
 
         if (this.#root) {
-            printNode(this.#root, 0);
+            printNode(this.#root, 0, null, this.#root.right ? true : false);
         } else return null
     }
 }
