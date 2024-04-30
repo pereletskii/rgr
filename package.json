@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/pereletskii/rgr/issues"
   },
-  "homepage": "https://github.com/pereletskii/rgr#readme"
+  "homepage": "https://github.com/pereletskii/rgr#readme",
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  }
 }
