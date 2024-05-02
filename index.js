@@ -94,12 +94,29 @@ function fuzzyInput() {
         }
         console.log();
 
+        if (exit) break;
+
         numsCount++;
         params.a.push(a);
         params.b.push(b);
     }
 
-    if (params) {
+    if (params.a.length > 0) {
+        console.clear();
+
+        let fuzzTables = [];
+
+        for (let i = 0; i < params.a.length; i++) {
+            fuzzTables.push(fuzz.mu(params.a[i], params.b[i]));
+            console.log(`\nТаблица по параметрам a: ${params.a[i]}, b: ${params.b[i]}`);
+            console.table(fuzzTables[i]);
+            sleep(1);
+        }
         // TODO добавить дефазификацию и дальнейшую работу с деревом
     }
+}
+
+function sleep(seconds){
+    var waitTill = new Date(new Date().getTime() + seconds * 1000);
+    while(waitTill > new Date()){}
 }
