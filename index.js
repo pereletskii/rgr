@@ -8,6 +8,7 @@ const info = JSON.parse(fs.readFileSync('./info.json'));
 
 let exit = false;
 while (!exit) {
+    console.clear();
     console.log(
         "Выберите режим:\n",
         "   1: Ввод нечётких чисел\n",
@@ -39,6 +40,8 @@ function isNumber(str) {
 }
 
 function fuzzyInput() {
+    console.clear();
+
     let exit = false;
     let numsCount = 0;
 
@@ -47,13 +50,16 @@ function fuzzyInput() {
         b: []
     }
 
+    console.clear();
     while (!exit){
         if (numsCount == 0) {
+            console.clear();
             console.log(
                 "\nТекущий режим - ввод нечётких чисел. Прекратить ввод - 'q'\n",
                 "Основное условие ввода a > 0\n"
             );
         } else {
+            console.clear();
             console.log(
                 "\nРанее введённые числа:"
             );
@@ -70,12 +76,13 @@ function fuzzyInput() {
             } else if (isNumber(a)) {
                 a = parseInt(a);
                 if (a <= 0) {
+                    console.clear();
                     console.log("\nЧисло должно быть положительным\n");
                     continue;
                 }
-                console.log(a);
                 break;
             } else {
+                console.clear();
                 console.log("\nНекорректное значение a\n");
                 continue;
             }
@@ -84,7 +91,9 @@ function fuzzyInput() {
 
         if (exit) break;
 
+        console.clear();
         while (true) {
+            console.log();
             b = prompt("b: ");
             if (b == 'q') {
                 exit = true;
@@ -93,6 +102,7 @@ function fuzzyInput() {
                 b = parseInt(b);
                 break;
             } else {
+                console.clear();
                 console.log("\nНекорректное значение b\n");
                 continue;
             }
@@ -108,6 +118,8 @@ function fuzzyInput() {
 
     if (params.a.length > 0) {
         let fuzzTables = [];
+
+        console.clear();
         console.log(info.affiliation);
         sleep(2000);
 
@@ -129,6 +141,8 @@ function fuzzyInput() {
         }
         console.log();
     }
+
+    prompt("Нажмите Enter чтобы начать заново");
 }
 
 function sleep(ms){
