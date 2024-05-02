@@ -1,10 +1,39 @@
+const { createRequire } = require('node:module');
+require = createRequire(__filename);
+
 const fuzz = require('./scripts/fuzzy_number_creation.js');
 const deffas = require('./scripts/deffasification.js');
 const bt = require('./scripts/binary_tree.js');
-const prompt = require("prompt-sync")({ sigint: true });
+
 const fs = require('fs');
 const info = JSON.parse(fs.readFileSync('./info.json'));
 
+const os = require('os');
+const child_process = require('child_process');
+function prompt(message)
+{
+    process.stdout.write(message);
+
+    let cmd;
+    let args;
+    if (os.platform() == "win32")
+    {
+        cmd = 'cmd';
+        args = [ '/V:ON', '/C', 'set /p response= && echo !response!' ];
+    }
+    else
+    {
+        cmd = 'bash';
+        args = [ '-c', 'read response; echo "$response"' ];
+    }
+
+    let opts = { 
+        stdio: [ 'inherit', 'pipe', 'inherit' ],
+        shell: false,
+    };
+
+    return child_process.spawnSync(cmd, args, opts).stdout.toString().trim();
+}
 
 let exit = false;
 while (!exit) {
