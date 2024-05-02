@@ -2,6 +2,9 @@ const fuzz = require('./scripts/fuzzy_number_creation.js');
 const deffas = require('./scripts/deffasification.js');
 const bt = require('./scripts/binary_tree.js');
 const prompt = require("prompt-sync")({ sigint: true });
+const fs = require('fs');
+const info = JSON.parse(fs.readFileSync('./info.json'));
+
 
 let exit = false;
 while (!exit) {
@@ -17,8 +20,10 @@ while (!exit) {
             fuzzyInput();
             break;
         case "2":
-            readTree();
+            readfuzzyNums();
             break;
+        case "3":
+            readTree();
         case "q":
             exit = true;
             break;
@@ -102,21 +107,31 @@ function fuzzyInput() {
     }
 
     if (params.a.length > 0) {
-        console.clear();
-
         let fuzzTables = [];
+        console.log(info.affiliation);
+        sleep(2000);
 
         for (let i = 0; i < params.a.length; i++) {
             fuzzTables.push(fuzz.mu(params.a[i], params.b[i]));
             console.log(`\nТаблица по параметрам a: ${params.a[i]}, b: ${params.b[i]}`);
             console.table(fuzzTables[i]);
-            sleep(1);
+            sleep(800);
         }
-        // TODO добавить дефазификацию и дальнейшую работу с деревом
+
+        let results = [];
+        console.log(`\n${info.defazzification}\n`);
+        sleep(2000);
+        
+        for (let i = 0; i < fuzzTables.length; i++) {
+            results.push(deffas.gravityCenter(fuzzTables[i]));
+            console.log(`Четкое число из таблицы по параметрам {a: ${params.a[i]}, b: ${params.b[i]}} - ${results[i]}`);
+            sleep(800);
+        }
+        console.log();
     }
 }
 
-function sleep(seconds){
-    var waitTill = new Date(new Date().getTime() + seconds * 1000);
+function sleep(ms){
+    var waitTill = new Date(new Date().getTime() + ms);
     while(waitTill > new Date()){}
 }
