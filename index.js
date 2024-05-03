@@ -40,9 +40,8 @@ while (!exit) {
     console.clear();
     console.log(
         "Выберите режим:\n",
-        "   1: Ввод нечётких чисел\n",
-        "   2: Чтение нечётких чисел из JSON\n",
-        "   3: Чтение дерева из JSON\n",
+        "   1: Ввод параметров нечётких чисел\n",
+        "   2: Чтение параметров нечётких чисел из JSON\n",
         "   q: Выход\n"
     )
     switch (prompt("Выберите нужный режим: ")) {
@@ -50,10 +49,8 @@ while (!exit) {
             fuzzyInput();
             break;
         case "2":
-            readfuzzyNums();
+            readFuzzyNums();
             break;
-        case "3":
-            readTree();
         case "q":
             exit = true;
             break;
@@ -66,6 +63,36 @@ console.log('\nВыход');
 
 function isNumber(str) {
     return !isNaN(parseFloat(str)) && isFinite(str);
+}
+
+function processNumbers(params) {
+    if (params.a.length != params.b.length) {
+        throw new RangeError("Количество параметров a и b должны быть одинаковыми");
+    }
+
+    let fuzzTables = [];
+
+    console.clear();
+    console.log(info.affiliation);
+    sleep(2000);
+
+    for (let i = 0; i < params.a.length; i++) {
+        fuzzTables.push(fuzz.mu(params.a[i], params.b[i]));
+        console.log(`\nТаблица по параметрам a: ${params.a[i]}, b: ${params.b[i]}`);
+        console.table(fuzzTables[i]);
+        sleep(600);
+    }
+
+    let results = [];
+    console.log(`\n${info.defazzification}\n`);
+    sleep(2000);
+    
+    for (let i = 0; i < fuzzTables.length; i++) {
+        results.push(deffas.gravityCenter(fuzzTables[i]));
+        console.log(`Четкое число из таблицы по параметрам {a: ${params.a[i]}, b: ${params.b[i]}} - ${results[i]}`);
+        sleep(600);
+    }
+    console.log();
 }
 
 function fuzzyInput() {
@@ -97,6 +124,27 @@ function fuzzyInput() {
         }
 
         let a, b;
+        
+        while (true) {
+            console.log();
+            b = prompt("b: ");
+            if (b == 'q') {
+                exit = true;
+                break;
+            } else if (isNumber(b)) {
+                b = parseInt(b);
+                break;
+            } else {
+                console.clear();
+                console.log("\nНекорректное значение b\n");
+                continue;
+            }
+        }
+        console.log();
+
+        if (exit) break;
+
+        console.clear();
         while (true) {
             a = prompt("a: ");
             if (a == 'q') {
@@ -120,58 +168,54 @@ function fuzzyInput() {
 
         if (exit) break;
 
-        console.clear();
-        while (true) {
-            console.log();
-            b = prompt("b: ");
-            if (b == 'q') {
-                exit = true;
-                break;
-            } else if (isNumber(b)) {
-                b = parseInt(b);
-                break;
-            } else {
-                console.clear();
-                console.log("\nНекорректное значение b\n");
-                continue;
-            }
-        }
-        console.log();
-
-        if (exit) break;
-
         numsCount++;
         params.a.push(a);
         params.b.push(b);
     }
 
     if (params.a.length > 0) {
-        let fuzzTables = [];
+        processNumbers(params);
 
-        console.clear();
-        console.log(info.affiliation);
-        sleep(2000);
-
-        for (let i = 0; i < params.a.length; i++) {
-            fuzzTables.push(fuzz.mu(params.a[i], params.b[i]));
-            console.log(`\nТаблица по параметрам a: ${params.a[i]}, b: ${params.b[i]}`);
-            console.table(fuzzTables[i]);
-            sleep(800);
-        }
-
-        let results = [];
-        console.log(`\n${info.defazzification}\n`);
-        sleep(2000);
-        
-        for (let i = 0; i < fuzzTables.length; i++) {
-            results.push(deffas.gravityCenter(fuzzTables[i]));
-            console.log(`Четкое число из таблицы по параметрам {a: ${params.a[i]}, b: ${params.b[i]}} - ${results[i]}`);
-            sleep(800);
-        }
-        console.log();
+        console.log(`Построение дерева`);
     }
 
-    prompt("Нажмите Enter чтобы начать заново");
+    prompt("Нажмите любой символ чтобы начать заново");
+}
+
+function readFuzzyNums() {
+    console.clear();
+    let exit = false;
+    while (!exit) {
+        console.log(info.fileJSON, '\n');
+
+        let path = prompt("Введите путь к файлу JSON: ");
+        if (path == 'q') {
+            exit = true;
+            break;
+        } else if (!fs.existsSync(path)) {
+            console.clear();
+            console.log("\nФайл не существует, повторите ввод\n");
+            continue;
+        }
+
+        try {
+            let params = JSON.parse(fs.readFileSync(path));
+            processNumbers(params);
+
+            exit = true;
+            break;
+        } catch (error) {
+            if (error instanceof SyntaxError) {
+                console.log(`\nОшибка в файле JSON: ${error.name}  ${error.message}\n`);
+            } else {
+                console.log(`\nДанные из файла ${path} не соотвествуют формату: ${error.name}  ${error.message}\n`);
+            }
+            prompt("Нажмите любой символ чтобы повторить ввод");
+            console.clear();
+        }
+    }
+
+    prompt("Нажмите любой символ чтобы начать заново");
 }
 
 function sleep(ms){
