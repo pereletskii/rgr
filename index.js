@@ -93,6 +93,39 @@ function processNumbers(params) {
         sleep(600);
     }
     console.log();
+
+    let tree = new bt.BinaryTree;
+    for (let i = 0; i < results.length; i++) {
+        tree.insert(results[i]);
+    }
+    tree.getTree();
+
+    while (true) {
+        if (prompt("\nДобавить узел? (y/n) ") == 'y') {
+            console.clear();
+            let a = prompt('a: ');
+            let b = prompt('b: ');
+    
+            try {
+                [a, b] = [a, b].map(x => parseInt(x));
+                let table = fuzz.mu(a, b);
+                console.log(`\nТаблица по параметрам a: ${a}, b: ${b} \n`)
+                console.table(table);
+
+                let result = deffas.gravityCenter(table);
+                console.log(`\nЧеткое число из таблицы по параметрам {a: ${a}, b: ${b}} - ${result}\n`);
+
+                tree.insert(result);
+                console.log();
+                tree.getTree();
+            } catch (error) {
+                console.log(error);
+                prompt("Нажмите любой символ чтобы повторить ввод");
+            }
+        } else {
+            break;
+        }
+    }
 }
 
 function fuzzyInput() {
@@ -175,11 +208,9 @@ function fuzzyInput() {
 
     if (params.a.length > 0) {
         processNumbers(params);
-
-        console.log(`Построение дерева`);
     }
 
-    prompt("Нажмите любой символ чтобы начать заново");
+    prompt("\nНажмите любой символ чтобы начать заново");
 }
 
 function readFuzzyNums() {
@@ -210,12 +241,12 @@ function readFuzzyNums() {
             } else {
                 console.log(`\nДанные из файла ${path} не соотвествуют формату: ${error.name}  ${error.message}\n`);
             }
-            prompt("Нажмите любой символ чтобы повторить ввод");
+            prompt("\nНажмите любой символ чтобы повторить ввод");
             console.clear();
         }
     }
 
-    prompt("Нажмите любой символ чтобы начать заново");
+    prompt("\nНажмите любой символ чтобы начать заново");
 }
 
 function sleep(ms){
