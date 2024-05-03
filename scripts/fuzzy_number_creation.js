@@ -1,3 +1,7 @@
+function isNumber(str) {
+    return !isNaN(parseFloat(str)) && isFinite(str);
+}
+
 function genX(a, b) {
     let l = b - a;
     let r = b + a;
@@ -7,11 +11,17 @@ function genX(a, b) {
     for (let i = l; i <= r; i++) {
         x.push(i);
     }
-    // console.log(`a: ${a}, b: ${b}`);
     return x
 }
 
 function mu(a, b) {
+    if (!isNumber(a) || !isNumber(b)) {
+        throw new TypeError("a и b должны быть числами");
+    }
+    if (a <= 0) {
+        throw new Error("a должно быть больше нуля");
+    }
+
     let muArr = [];
     let x = genX(a, b);
 
