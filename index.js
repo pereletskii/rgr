@@ -1,12 +1,12 @@
 const { createRequire } = require('node:module');
 require = createRequire(__filename);
 
+const fs = require('fs');
+
 const fuzz = require('./scripts/fuzzy_number_creation.js');
 const deffas = require('./scripts/deffasification.js');
 const bt = require('./scripts/binary_tree.js');
-
-const fs = require('fs');
-const info = JSON.parse(fs.readFileSync('./info.json'));
+const info = require('./assets/info.json');
 
 const os = require('os');
 const child_process = require('child_process');

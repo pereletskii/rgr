@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/pereletskii/rgr/issues"
   },
-  "homepage": "https://github.com/pereletskii/rgr#readme"
+  "homepage": "https://github.com/pereletskii/rgr#readme",
+  "bin": "index.js",
+  "pkg": {
+    "scripts": "scripts/**/*.js",
+    "assets": "assets/**/*",
+    "targets": ["node18-linux-x64", "node18-win-x64"],
+    "outputPath": "dist"
+  }
 }
