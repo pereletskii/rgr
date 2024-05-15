@@ -69,6 +69,9 @@ function processNumbers(params) {
     if (params.a.length != params.b.length) {
         throw new RangeError("Количество параметров a и b должны быть одинаковыми");
     }
+    if (params.a.length < 7) {
+        throw new RangeError("Количество параметров должно быть не меньше 7");
+    }
 
     let fuzzTables = [];
 
@@ -144,7 +147,7 @@ function fuzzyInput() {
         if (numsCount == 0) {
             console.clear();
             console.log(
-                "\nТекущий режим - ввод нечётких чисел. Прекратить ввод - 'q'\n",
+                "\nТекущий режим - ввод нечётких чисел (минимум 7 пар параметров). Прекратить ввод - 'q'\n",
                 "Основное условие ввода a > 0\n"
             );
         } else {
@@ -162,8 +165,13 @@ function fuzzyInput() {
             console.log();
             b = prompt("b: ");
             if (b == 'q') {
-                exit = true;
-                break;
+                if (params.a.length < 7){
+                    console.log('Введите минимум 7 нечетких чисел!');
+                    continue;
+                } else {
+                    exit = true;
+                    break;
+                }
             } else if (isNumber(b)) {
                 b = parseInt(b);
                 break;
@@ -181,8 +189,13 @@ function fuzzyInput() {
         while (true) {
             a = prompt("a: ");
             if (a == 'q') {
-                exit = true;
-                break;
+                if (params.a.length < 7){
+                    console.log('Введите минимум 7 нечетких чисел!');
+                    continue;
+                } else {
+                    exit = true;
+                    break;
+                }
             } else if (isNumber(a)) {
                 a = parseInt(a);
                 if (a <= 0) {
