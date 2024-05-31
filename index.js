@@ -39,15 +39,11 @@ while (!exit) {
     console.clear();
     console.log(
         "Выберите режим:\n",
-        "   1: Ввод параметров нечётких чисел\n",
-        "   2: Чтение параметров нечётких чисел из JSON\n",
+        "   1: Чтение параметров нечётких чисел из JSON\n",
         "   q: Выход\n"
     )
     switch (prompt("Выберите нужный режим: ")) {
         case "1":
-            fuzzyInput();
-            break;
-        case "2":
             readFuzzyNums();
             break;
         case "q":
@@ -74,23 +70,17 @@ function processNumbers(params) {
 
     let fuzzTables = [];
 
-    console.clear();
-    sleep(2000);
-
     for (let i = 0; i < params.a.length; i++) {
         fuzzTables.push(fuzz.mu(params.a[i], params.b[i]));
         console.log(`\nТаблица по параметрам a: ${params.a[i]}, b: ${params.b[i]}`);
         console.table(fuzzTables[i]);
-        sleep(600);
     }
 
     let results = [];
-    sleep(2000);
     
     for (let i = 0; i < fuzzTables.length; i++) {
         results.push(deffas.areaCenter(fuzzTables[i]));
         console.log(`Четкое число из таблицы по параметрам {a: ${params.a[i]}, b: ${params.b[i]}} - ${results[i]}`);
-        sleep(600);
     }
     console.log();
 
@@ -126,101 +116,6 @@ function processNumbers(params) {
             break;
         }
     }
-}
-
-function fuzzyInput() {
-    console.clear();
-
-    let exit = false;
-    let numsCount = 0;
-
-    let params = {
-        a: [],
-        b: []
-    }
-
-    console.clear();
-    while (!exit){
-        if (numsCount == 0) {
-            console.clear();
-            console.log(
-                "\nТекущий режим - ввод нечётких чисел (минимум 7 пар параметров). Прекратить ввод - 'q'\n",
-                "Основное условие ввода a > 0\n"
-            );
-        } else {
-            console.clear();
-            console.log(
-                "\nРанее введённые числа:"
-            );
-            console.table(params);
-            console.log("Прекратить ввод - 'q'\n");
-        }
-
-        let a, b;
-        
-        while (true) {
-            console.log();
-            b = prompt("b: ");
-            if (b == 'q') {
-                if (params.a.length < 7){
-                    console.log('Введите минимум 7 нечетких чисел!');
-                    continue;
-                } else {
-                    exit = true;
-                    break;
-                }
-            } else if (isNumber(b)) {
-                b = parseInt(b);
-                break;
-            } else {
-                console.clear();
-                console.log("\nНекорректное значение b\n");
-                continue;
-            }
-        }
-        console.log();
-
-        if (exit) break;
-
-        console.clear();
-        while (true) {
-            a = prompt("a: ");
-            if (a == 'q') {
-                if (params.a.length < 7){
-                    console.log('Введите минимум 7 нечетких чисел!');
-                    continue;
-                } else {
-                    exit = true;
-                    break;
-                }
-            } else if (isNumber(a)) {
-                a = parseInt(a);
-                if (a <= 0) {
-                    console.clear();
-                    console.log("\nЧисло должно быть положительным\n");
-                    continue;
-                }
-                break;
-            } else {
-                console.clear();
-                console.log("\nНекорректное значение a\n");
-                continue;
-            }
-        }
-        console.log();
-
-        if (exit) break;
-
-        numsCount++;
-        params.a.push(a);
-        params.b.push(b);
-    }
-
-    if (params.a.length > 0) {
-        processNumbers(params);
-    }
-
-    prompt("\nНажмите любой символ чтобы начать заново");
 }
 
 function readFuzzyNums() {
