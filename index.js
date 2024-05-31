@@ -6,7 +6,6 @@ const fs = require('fs');
 const fuzz = require('./scripts/fuzzy_number_creation.js');
 const deffas = require('./scripts/deffasification.js');
 const bt = require('./scripts/binary_tree.js');
-const info = require('./assets/info.json');
 
 const os = require('os');
 const child_process = require('child_process');
@@ -76,7 +75,6 @@ function processNumbers(params) {
     let fuzzTables = [];
 
     console.clear();
-    console.log(info.affiliation);
     sleep(2000);
 
     for (let i = 0; i < params.a.length; i++) {
@@ -87,11 +85,10 @@ function processNumbers(params) {
     }
 
     let results = [];
-    console.log(`\n${info.defazzification}\n`);
     sleep(2000);
     
     for (let i = 0; i < fuzzTables.length; i++) {
-        results.push(deffas.gravityCenter(fuzzTables[i]));
+        results.push(deffas.areaCenter(fuzzTables[i]));
         console.log(`Четкое число из таблицы по параметрам {a: ${params.a[i]}, b: ${params.b[i]}} - ${results[i]}`);
         sleep(600);
     }
@@ -115,7 +112,7 @@ function processNumbers(params) {
                 console.log(`\nТаблица по параметрам a: ${a}, b: ${b} \n`)
                 console.table(table);
 
-                let result = deffas.gravityCenter(table);
+                let result = deffas.areaCenter(table);
                 console.log(`\nЧеткое число из таблицы по параметрам {a: ${a}, b: ${b}} - ${result}\n`);
 
                 tree.insert(result);
@@ -230,8 +227,6 @@ function readFuzzyNums() {
     console.clear();
     let exit = false;
     while (!exit) {
-        console.log(info.fileJSON, '\n');
-
         let path = prompt("Введите путь к файлу JSON: ");
         if (path == 'q') {
             exit = true;

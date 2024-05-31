@@ -36,8 +36,6 @@ function mu(a, b) {
             muArr.push(0);
         }
     }
-    // console.log(`a: ${a}, b: ${b}`);
-    // console.table();
 
     return { mu: muArr, x: x }
 }
